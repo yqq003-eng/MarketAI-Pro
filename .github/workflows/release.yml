@@ -1,7 +1,23 @@
-name: Release
-on: push
+name: Build Release
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - run: echo hello from release
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Package source code
+        run: |
+          zip -r MarketAI-Pro-Source.zip             src/             electron/             ipc-handlers/             resources/             database/             docs/             package.json             README.md             .gitignore             -x "*.db"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MarketAI-Pro-v1.0.0-Source
+          path: MarketAI-Pro-Source.zip
+          retention-days: 30
