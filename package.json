@@ -1,0 +1,72 @@
+{
+  "name": "marketai-pro",
+  "version": "1.0.0",
+  "description": "MarketAI Pro - 企业级AI营销自动化平台",
+  "author": "MarketAI Team",
+  "license": "COMMERCIAL",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:electron dev:vue",
+    "dev:electron": "electron . --development",
+    "dev:vue": "vue-cli-service serve",
+    "build": "vue-cli-service build && electron-builder",
+    "build:vue": "vue-cli-service build",
+    "build:electron": "electron-builder",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --publish=never",
+    "server": "node src/backend/server.js",
+    "db:init": "node database/init.js"
+  },
+  "dependencies": {
+    "vue": "^3.3.0",
+    "vue-router": "^4.2.0",
+    "pinia": "^2.1.0",
+    "element-plus": "^2.4.0",
+    "axios": "^1.6.0",
+    "socket.io-client": "^4.7.0",
+    "echarts": "^5.4.0",
+    "dayjs": "^1.11.0",
+    "express": "^4.18.0",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "bcryptjs": "^2.4.3",
+    "nanoid": "^3.3.7",
+    "xlsx": "^0.18.5",
+    "crypto-js": "^4.2.0",
+    "fuse.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "electron": "27.0.0",
+    "electron-builder": "24.6.0",
+    "@vue/cli-service": "^5.0.0",
+    "@vue/cli-plugin-babel": "^5.0.0",
+    "@vue/cli-plugin-router": "^5.0.0",
+    "sass": "^1.69.0",
+    "npm-run-all": "^4.1.5"
+  },
+  "build": {
+    "appId": "com.marketai.pro",
+    "productName": "MarketAI Pro",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "src/backend/**/*",
+      "database/**/*",
+      "resources/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "MarketAI Pro"
+    }
+  }
+}

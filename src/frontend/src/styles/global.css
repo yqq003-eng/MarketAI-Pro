@@ -1,0 +1,315 @@
+/* 全局样式 */
+:root {
+  /* 主题色 */
+  --primary-color: #6366f1;
+  --primary-light: #a78bfa;
+  --primary-dark: #4f46e5;
+  
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --info-color: #0ea5e9;
+  
+  /* 中性色 */
+  --text-primary: #303133;
+  --text-regular: #606266;
+  --text-secondary: #909399;
+  --text-placeholder: #c0c4cc;
+  
+  --border-color: #dcdfe6;
+  --border-light: #e4e7ed;
+  --border-lighter: #ebeef5;
+  --border-extra-light: #f2f6fc;
+  
+  --background-color: #f0f2f5;
+  --background-color-base: #f5f7fa;
+  
+  /* 字体 */
+  --font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  --font-size-extra-large: 20px;
+  --font-size-large: 18px;
+  --font-size-medium: 16px;
+  --font-size-base: 14px;
+  --font-size-small: 13px;
+  --font-size-extra-small: 12px;
+  
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  /* 圆角 */
+  --border-radius-sm: 2px;
+  --border-radius-base: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  
+  /* 阴影 */
+  --box-shadow-base: 0 2px 12px rgba(0, 0, 0, 0.1);
+  --box-shadow-light: 0 2px 12px rgba(0, 0, 0, 0.05);
+  --box-shadow-dark: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 全局重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--border-extra-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-placeholder);
+  border-radius: 3px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* 通用工具类 */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* 卡片样式 */
+.card {
+  background: #fff;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-light);
+  padding: var(--spacing-lg);
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: var(--box-shadow-base);
+}
+
+/* 按钮增强 */
+.el-button--primary {
+  --el-button-bg-color: var(--primary-color);
+  --el-button-border-color: var(--primary-color);
+  --el-button-hover-bg-color: var(--primary-light);
+  --el-button-hover-border-color: var(--primary-light);
+  --el-button-active-bg-color: var(--primary-dark);
+  --el-button-active-border-color: var(--primary-dark);
+}
+
+/* 表格增强 */
+.el-table {
+  --el-table-header-bg-color: var(--background-color-base);
+  font-size: var(--font-size-base);
+}
+
+.el-table th.el-table__cell {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* 表单增强 */
+.el-form--label-top .el-form-item__label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* 对话框增强 */
+.el-dialog {
+  border-radius: var(--border-radius-lg);
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: var(--spacing-md);
+}
+
+.el-dialog__footer {
+  border-top: 1px solid var(--border-light);
+  padding-top: var(--spacing-md);
+}
+
+/* 消息提示增强 */
+.el-message {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-base);
+}
+
+/* 加载动画 */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  animation: rotate 1s linear infinite;
+}
+
+/* 渐入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 页面容器 */
+.page-container {
+  padding: var(--spacing-lg);
+  background: #fff;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-light);
+  min-height: calc(100vh - 120px);
+}
+
+/* 区块标题 */
+.section-title {
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-sm);
+  border-left: 4px solid var(--primary-color);
+}
+
+/* 状态标签 */
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: var(--font-size-extra-small);
+  font-weight: 600;
+}
+
+.status-tag-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success-color);
+}
+
+.status-tag-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+}
+
+.status-tag-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger-color);
+}
+
+/* 暗色主题 (可选) */
+[theme='dark'] {
+  --text-primary: #e0e6ff;
+  --text-regular: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-placeholder: #484f58;
+  
+  --border-color: #30363d;
+  --border-light: #21262d;
+  --border-lighter: #161b22;
+  --border-extra-light: #0d1117;
+  
+  --background-color: #0a0e1a;
+  --background-color-base: #161b22;
+  
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}
+
+/* 打印样式 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .page-container {
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  :root {
+    --font-size-extra-large: 18px;
+    --font-size-large: 16px;
+    --font-size-medium: 15px;
+    --font-size-base: 14px;
+  }
+  
+  .page-container {
+    padding: var(--spacing-md);
+  }
+}
