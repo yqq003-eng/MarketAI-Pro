@@ -1,4 +1,7 @@
 name: Release
 on: push
-jobs://n  build://n    runs-on: ubuntu-latest
-    steps://n      - run: echo hello from release
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo hello from release
