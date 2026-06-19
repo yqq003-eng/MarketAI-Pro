@@ -34,7 +34,9 @@ jobs:
         run: dir src\frontend\dist
 
       - name: Copy frontend build to dist
-        run: robocopy src\frontend\dist dist /E
+        run: |
+          if not exist dist mkdir dist
+          robocopy src\frontend\dist dist /E /NFL /NDL || echo "robocopy done"
 
       - name: List dist contents
         run: dir dist
