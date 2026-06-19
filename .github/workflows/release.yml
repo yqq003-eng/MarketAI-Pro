@@ -17,11 +17,24 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install dependencies
+      - name: Print versions
+        run: |
+          node --version
+          npm --version
+
+      - name: Install root dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
         run: npm install --legacy-peer-deps
 
       - name: Build Vue frontend
-        run: npm run build:vue
+        working-directory: src/frontend
+        run: npm run build
+
+      - name: Verify dist directory
+        run: dir dist
 
       - name: Build Electron app
         run: npm run build:electron
