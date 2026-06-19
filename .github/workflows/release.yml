@@ -30,10 +30,14 @@ jobs:
         working-directory: src/frontend
         run: npm run build
 
+      - name: List frontend dist contents
+        run: dir src\frontend\dist
+
       - name: Copy frontend build to dist
-        run: |
-          if not exist dist mkdir dist
-          xcopy /E /I /Y "src\frontend\dist" dist\
+        run: robocopy src\frontend\dist dist /E
+
+      - name: List dist contents
+        run: dir dist
 
       - name: Build Electron app
         run: npm run build:electron
