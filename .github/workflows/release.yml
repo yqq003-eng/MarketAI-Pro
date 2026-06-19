@@ -1,0 +1,15 @@
+name: Build Release
+on:
+  push:
+    branches: [main]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package source
+        run: zip -r MarketAI-Pro.zip src electron ipc-handlers resources database docs package.json README.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MarketAI-Pro-Source
+          path: MarketAI-Pro.zip
