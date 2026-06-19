@@ -22,10 +22,10 @@ jobs:
       - name: Install root dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Check electron-builder installation
+      - name: Verify electron-builder installation
         run: |
-          dir node_modules\.bin\ | findstr /i electron || echo "No electron-builder in .bin"
-          npm list electron-builder || echo "electron-builder not installed"
+          dir node_modules\.bin\electron-builder.cmd
+          .\node_modules\.bin\electron-builder --version
         continue-on-error: true
 
       - name: Install frontend dependencies
@@ -36,20 +36,14 @@ jobs:
         working-directory: src/frontend
         run: npm run build
 
-      - name: List frontend dist contents
-        run: dir src\frontend\dist
-
       - name: Copy frontend build to dist
         run: |
-          if (!(Test-Path dist)) { New-Item -ItemType Directory -Path dist -Force }
+          New-Item -ItemType Directory -Path dist -Force
           Copy-Item -Path "src\frontend\dist\*" -Destination "dist\" -Recurse -Force
-          Write-Host "Copied frontend build to dist/"
 
-      - name: List dist contents
-        run: dir dist
-
-      - name: Build Electron app (using npx)
-        run: npx electron-builder --publish=never
+      - name: Build Electron app
+        run: .\node_modules\.bin\electron-builder.cmd --publish=never
+        timeout-minutes: 10
 
       - name: List dist_electron contents
         run: dir dist_electron
@@ -57,7 +51,7 @@ jobs:
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MarketAI-Pro-Setup-v1.0.0
+          name: MarketAI-Pro-Setup
           path: dist_electron/*Setup*.exe
           retention-days: 30
         if: always()
