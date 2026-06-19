@@ -22,6 +22,12 @@ jobs:
       - name: Install root dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Check electron-builder installation
+        run: |
+          dir node_modules\.bin\ | findstr /i electron || echo "No electron-builder in .bin"
+          npm list electron-builder || echo "electron-builder not installed"
+        continue-on-error: true
+
       - name: Install frontend dependencies
         working-directory: src/frontend
         run: npm install --legacy-peer-deps
@@ -35,14 +41,15 @@ jobs:
 
       - name: Copy frontend build to dist
         run: |
-          if (!(Test-Path dist)) { New-Item -ItemType Directory -Path dist }
+          if (!(Test-Path dist)) { New-Item -ItemType Directory -Path dist -Force }
           Copy-Item -Path "src\frontend\dist\*" -Destination "dist\" -Recurse -Force
+          Write-Host "Copied frontend build to dist/"
 
       - name: List dist contents
         run: dir dist
 
-      - name: Build Electron app
-        run: npm run build:electron
+      - name: Build Electron app (using npx)
+        run: npx electron-builder --publish=never
 
       - name: List dist_electron contents
         run: dir dist_electron
