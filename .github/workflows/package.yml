@@ -2,18 +2,32 @@ name: Package MarketAI Pro
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Upload package
+      - name: Create source package
+        run: |
+          zip -r MarketAI-Pro-Source.zip . \
+            -x "node_modules/*" \
+            -x "dist/*" \
+            -x "dist_electron/*" \
+            -x "electron/dist/*" \
+            -x ".git/*" \
+            -x "*.db" \
+            -x "*.pid" \
+            -x "*.seed" \
+            -x ".DS_Store"
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MarketAI-Pro-v1.0.0-Complete
-          path: .
+          name: MarketAI-Pro-v1.0.0-Source
+          path: MarketAI-Pro-Source.zip
           retention-days: 30
