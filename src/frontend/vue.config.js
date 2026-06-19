@@ -5,8 +5,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
   productionSourceMap: false,
-  outputDir: '../../dist',
-  publicPath: './',
+  parallel: false,
   
   devServer: {
     port: 8080,
@@ -43,8 +42,7 @@ module.exports = defineConfig({
       alias: {
         '@': path.resolve(__dirname, 'src')
       }
-    },
-    parallelism: false
+    }
   },
 
   chainWebpack: (config) => {

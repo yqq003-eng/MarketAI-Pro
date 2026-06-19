@@ -21,7 +21,7 @@
         <el-card shadow="hover" class="summary-card">
           <div class="summary-content">
             <div class="summary-icon" style="background: #409EFF;">
-              <el-icon :size="30"><Briefcase /></el-icon>
+              <i class="el-icon-briefcase" style="font-size:30px;color:white;"></i>
             </div>
             <div class="summary-info">
               <div class="summary-value">{{ summary.total_jobs || 0 }}</div>
@@ -34,7 +34,7 @@
         <el-card shadow="hover" class="summary-card">
           <div class="summary-content">
             <div class="summary-icon" style="background: #67C23A;">
-              <el-icon :size="30"><User /></el-icon>
+              <i class="el-icon-user" style="font-size:30px;color:white;"></i>
             </div>
             <div class="summary-info">
               <div class="summary-value">{{ summary.total_candidates || 0 }}</div>
@@ -47,7 +47,7 @@
         <el-card shadow="hover" class="summary-card">
           <div class="summary-content">
             <div class="summary-icon" style="background: #E6A23C;">
-              <el-icon :size="30"><ChatDotRound /></el-icon>
+              <i class="el-icon-chat-dot-round" style="font-size:30px;color:white;"></i>
             </div>
             <div class="summary-info">
               <div class="summary-value">{{ summary.interviewing_count || 0 }}</div>
@@ -60,7 +60,7 @@
         <el-card shadow="hover" class="summary-card">
           <div class="summary-content">
             <div class="summary-icon" style="background: #F56C6C;">
-              <el-icon :size="30"><SuccessFilled /></el-icon>
+              <i class="el-icon-success-filled" style="font-size:30px;color:white;"></i>
             </div>
             <div class="summary-info">
               <div class="summary-value">{{ summary.hired_count || 0 }}</div>
@@ -127,59 +127,58 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
-import { Briefcase, User, ChatDotRound, SuccessFilled } from '@element-plus/icons-vue'
 
 export default {
   name: 'RecruitmentAnalytics',
-  components: {
-    Briefcase,
-    User,
-    ChatDotRound,
-    SuccessFilled
+  data() {
+    return {
+      dateRange: [],
+      summary: {},
+      jobStats: [],
+      statusChartInstance: null,
+      trendChartInstance: null
+    }
   },
-  setup() {
-    const dateRange = ref([])
-    const summary = ref({})
-    const jobStats = ref([])
-    
-    const statusChart = ref(null)
-    const trendChart = ref(null)
-    
-    let statusChartInstance = null
-    let trendChartInstance = null
-    
-    const loadAnalytics = async () => {
+  mounted() {
+    this.loadAnalytics()
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
+    if (this.statusChartInstance) this.statusChartInstance.dispose()
+    if (this.trendChartInstance) this.trendChartInstance.dispose()
+  },
+  methods: {
+    async loadAnalytics() {
       try {
-        const startDate = dateRange.value ? dateRange.value[0] : getDefaultStartDate()
-        const endDate = dateRange.value ? dateRange.value[1] : getDefaultEndDate()
+        const startDate = this.dateRange.length ? this.dateRange[0] : this.getDefaultStartDate()
+        const endDate = this.dateRange.length ? this.dateRange[1] : this.getDefaultEndDate()
         
-        const response = await fetch(`/api/boss/analytics?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`)
+        const response = await fetch(`/api/boss/analytics?start_date=${this.formatDate(startDate)}&end_date=${this.formatDate(endDate)}`)
         const result = await response.json()
         if (result.code === 200) {
-          summary.value = result.data.summary
-          jobStats.value = result.data.job_stats
+          this.summary = result.data.summary
+          this.jobStats = result.data.job_stats
           
-          nextTick(() => {
-            initCharts(result.data.status distribution, result.data.application_trend)
+          this.$nextTick(() => {
+            this.initCharts(result.data.status_distribution, result.data.application_trend)
           })
         }
       } catch (error) {
         ElMessage.error('加载统计数据失败')
       }
-    }
-    
-    const initCharts = (statusDistribution, applicationTrend) => {
+    },
+    initCharts(statusDistribution, applicationTrend) {
       // 候选人状态分布图
-      if (statusChart.value) {
-        if (statusChartInstance) {
-          statusChartInstance.dispose()
+      if (this.$refs.statusChart) {
+        if (this.statusChartInstance) {
+          this.statusChartInstance.dispose()
         }
-        statusChartInstance = echarts.init(statusChart.value)
+        this.statusChartInstance = echarts.init(this.$refs.statusChart)
         
-        statusChartInstance.setOption({
+        this.statusChartInstance.setOption({
           tooltip: { trigger: 'item' },
           legend: { orient: 'vertical', right: 10, top: 'center' },
           series: [{
@@ -191,16 +190,16 @@ export default {
       }
       
       // 职位申请趋势图
-      if (trendChart.value) {
-        if (trendChartInstance) {
-          trendChartInstance.dispose()
+      if (this.$refs.trendChart) {
+        if (this.trendChartInstance) {
+          this.trendChartInstance.dispose()
         }
-        trendChartInstance = echarts.init(trendChart.value)
+        this.trendChartInstance = echarts.init(this.$refs.trendChart)
         
         const dates = applicationTrend.map(item => item.date)
         const counts = applicationTrend.map(item => item.count)
         
-        trendChartInstance.setOption({
+        this.trendChartInstance.setOption({
           tooltip: { trigger: 'axis' },
           xAxis: { type: 'category', data: dates },
           yAxis: { type: 'value' },
@@ -212,54 +211,28 @@ export default {
           }]
         })
       }
-    }
-    
-    const refreshData = () => {
-      loadAnalytics()
-    }
-    
-    const getDefaultStartDate = () => {
+    },
+    refreshData() {
+      this.loadAnalytics()
+    },
+    getDefaultStartDate() {
       const date = new Date()
       date.setDate(date.getDate() - 30)
       return date
-    }
-    
-    const getDefaultEndDate = () => {
+    },
+    getDefaultEndDate() {
       return new Date()
-    }
-    
-    const formatDate = (date) => {
+    },
+    formatDate(date) {
       const d = new Date(date)
       const year = d.getFullYear()
       const month = String(d.getMonth() + 1).padStart(2, '0')
       const day = String(d.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
-    }
-    
-    const handleResize = () => {
-      if (statusChartInstance) statusChartInstance.resize()
-      if (trendChartInstance) trendChartInstance.resize()
-    }
-    
-    onMounted(() => {
-      loadAnalytics()
-      window.addEventListener('resize', handleResize)
-    })
-    
-    onUnmounted(() => {
-      window.removeEventListener('resize', handleResize)
-      if (statusChartInstance) statusChartInstance.dispose()
-      if (trendChartInstance) trendChartInstance.dispose()
-    })
-    
-    return {
-      dateRange,
-      summary,
-      jobStats,
-      statusChart,
-      trendChart,
-      loadAnalytics,
-      refreshData
+    },
+    handleResize() {
+      if (this.statusChartInstance) this.statusChartInstance.resize()
+      if (this.trendChartInstance) this.trendChartInstance.resize()
     }
   }
 }
