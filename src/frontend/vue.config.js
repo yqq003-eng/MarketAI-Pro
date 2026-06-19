@@ -43,7 +43,8 @@ module.exports = defineConfig({
       alias: {
         '@': path.resolve(__dirname, 'src')
       }
-    }
+    },
+    parallelism: false
   },
 
   chainWebpack: (config) => {

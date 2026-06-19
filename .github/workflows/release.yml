@@ -8,6 +8,8 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,17 +31,9 @@ jobs:
         working-directory: src/frontend
         run: npm install --legacy-peer-deps
 
-      - name: Build Vue frontend (capture output)
+      - name: Build Vue frontend
         working-directory: src/frontend
-        run: npm run build 2>&1 | tee build.log
-
-      - name: Upload build log on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: src/frontend/build.log
-          retention-days: 7
+        run: npm run build
 
       - name: Verify dist directory
         run: dir dist
