@@ -1,28 +1,13 @@
 name: Package MarketAI Pro
-
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-
 jobs:
-  package:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Upload source code
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: MarketAI-Pro-Source
-          path: |
-            src
-            electron
-            ipc-handlers
-            resources
-            database
-            docs
-            package.json
-            README.md
-            .gitignore
-          retention-days: 30
+          name: MarketAI-Pro
+          path: src
