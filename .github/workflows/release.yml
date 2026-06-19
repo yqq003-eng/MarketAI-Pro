@@ -35,8 +35,8 @@ jobs:
 
       - name: Copy frontend build to dist
         run: |
-          if not exist dist mkdir dist
-          robocopy src\frontend\dist dist /E /NFL /NDL || echo "robocopy done"
+          if (!(Test-Path dist)) { New-Item -ItemType Directory -Path dist }
+          Copy-Item -Path "src\frontend\dist\*" -Destination "dist\" -Recurse -Force
 
       - name: List dist contents
         run: dir dist
